@@ -2,7 +2,7 @@ package auth
 
 import (
 	"context"
-	"showper_server/factory"
+	"sumwhere_meet/factory"
 	"time"
 )
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
-	"showper_server/factory"
+	"sumwhere_meet/factory"
 	"time"
 )
 

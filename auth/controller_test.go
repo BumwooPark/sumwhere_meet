@@ -8,9 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
-	"showper_server/middlewares"
-	"showper_server/utils"
 	"strings"
+	"sumwhere_meet/middlewares"
+	"sumwhere_meet/utils"
 	"testing"
 )
 

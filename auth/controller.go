@@ -6,8 +6,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"io/ioutil"
 	"net/http"
-	"showper_server/factory"
-	"showper_server/utils"
+	"sumwhere_meet/factory"
+	"sumwhere_meet/utils"
 )
 
 type Controller struct {

@@ -3,8 +3,8 @@ package auth
 import (
 	"context"
 	"fmt"
-	"showper_server/factory"
 	"strconv"
+	"sumwhere_meet/factory"
 )
 
 type KakaoUser struct {

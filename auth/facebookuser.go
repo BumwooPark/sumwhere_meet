@@ -3,7 +3,7 @@ package auth
 import (
 	"context"
 	"fmt"
-	"showper_server/factory"
+	"sumwhere_meet/factory"
 )
 
 type FaceBookUser struct {

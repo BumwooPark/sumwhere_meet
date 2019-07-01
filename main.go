@@ -2,7 +2,7 @@ package main
 
 import (
 	"runtime"
-	"showper_server/app"
+	"sumwhere_meet/app"
 )
 
 func main() {
