@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/asaskevich/govalidator"
@@ -8,19 +9,24 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"gopkg.in/testfixtures.v2"
+	"log"
 	"net/http"
 	"net/http/httptest"
-	"showper_server/database"
-	"showper_server/middlewares"
-	"showper_server/utils"
+	"os"
 	"strings"
+	"sumwhere_meet/database"
+	"sumwhere_meet/middlewares"
+	"sumwhere_meet/utils"
 	"testing"
 )
 
 var (
-	server  *echo.Echo
-	handler func(handlerFunc echo.HandlerFunc, c echo.Context) error
-	db      *xorm.Engine
+	server   *echo.Echo
+	handler  func(handlerFunc echo.HandlerFunc, c echo.Context) error
+	db       *xorm.Engine
+	testdb   *sql.DB
+	fixtures *testfixtures.Context
 )
 
 type Validator struct{}
@@ -30,18 +36,43 @@ func (v *Validator) Validate(i interface{}) error {
 	return err
 }
 
-func init() {
+func TestMain(m *testing.M) {
+
 	server = echo.New()
+	os.Setenv("DATABASE_NAME", "test")
 	db, err := database.NewDatabase()
 	if err != nil {
 		fmt.Println(err)
 	}
 	databasehandler := middlewares.ContextDB("database", db)
-	_ = db.Sync2(new(Image), new(Profile))
+	_ = db.Sync2(new(Image), new(Profile), new(Area), new(InterestCategory), new(InterestDetail))
 	handler = func(handlerFunc echo.HandlerFunc, c echo.Context) error {
 		return databasehandler(handlerFunc)(c)
 	}
 	server.Validator = &Validator{}
+
+	testdb, err := sql.Open("mysql", "root:1q2w3e4r@tcp(localhost:3306)/test?charset=utf8mb4")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fixtures, err = testfixtures.NewFolder(testdb, &testfixtures.MySQL{}, "fixtures")
+	if err != nil {
+		log.Fatal(err)
+	}
+	testfixtures.SkipDatabaseNameCheck(true)
+
+	if err := fixtures.DetectTestDatabase(); err != nil {
+		log.Fatal(err)
+	}
+
+	os.Exit(m.Run())
+}
+
+func prepareTestDatabase() {
+	if err := fixtures.Load(); err != nil {
+		fmt.Println(err)
+	}
 }
 
 func TestController_Create(t *testing.T) {
@@ -83,4 +114,8 @@ func TestController_Exist(t *testing.T) {
 	ctx.SetParamValues("1")
 	require.NoError(t, handler(Controller{}.Get, ctx))
 	require.Equal(t, http.StatusOK, rec.Code, rec.Body)
+}
+
+func TestArea(t *testing.T) {
+	prepareTestDatabase()
 }

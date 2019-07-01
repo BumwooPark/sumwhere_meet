@@ -1,0 +1,45 @@
+
+# 여행
+- id: 1
+  category_id: 1
+  name: 등산
+  created_at: "2019-07-01 00:00:00"
+  updated_at: "2019-07-01 00:00:00"
+
+- id: 2
+  category_id: 1
+  name: 산책
+  created_at: "2019-07-01 00:00:00"
+  updated_at: "2019-07-01 00:00:00"
+
+- id: 3
+  category_id: 1
+  name: 캠핑
+  created_at: "2019-07-01 00:00:00"
+  updated_at: "2019-07-01 00:00:00"
+
+- id: 4
+  category_id: 1
+  name: 국내여행
+  created_at: "2019-07-01 00:00:00"
+  updated_at: "2019-07-01 00:00:00"
+
+- id: 5
+  category_id: 1
+  name: 해외여행
+  created_at: "2019-07-01 00:00:00"
+  updated_at: "2019-07-01 00:00:00"
+
+- id: 6
+  category_id: 1
+  name: 낚시
+  created_at: "2019-07-01 00:00:00"
+  updated_at: "2019-07-01 00:00:00"
+
+# 운동/스포츠
+
+- id: 7
+  category_id: 2
+  name: 자전거
+  created_at: "2019-07-01 00:00:00"
+  updated_at: "2019-07-01 00:00:00"

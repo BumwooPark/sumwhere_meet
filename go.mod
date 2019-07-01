@@ -1,4 +1,4 @@
-module showper_server
+module sumwhere_meet
 
 go 1.12
 

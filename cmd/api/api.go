@@ -11,9 +11,9 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"showper_server/database"
-	_ "showper_server/docs"
-	"showper_server/middlewares"
+	"sumwhere_meet/database"
+	_ "sumwhere_meet/docs"
+	"sumwhere_meet/middlewares"
 	"syscall"
 	"time"
 )

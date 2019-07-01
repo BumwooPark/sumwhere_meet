@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/pkg/errors"
-	"showper_server/factory"
+	"sumwhere_meet/factory"
 	"time"
 )
 
@@ -14,6 +14,8 @@ type Profile struct {
 	Age       int       `json:"age" xorm:"age" valid:"int,range(10|60),required"`
 	Job       string    `json:"job" xorm:"job" valid:"utfletter,required"`
 	Phone     string    `json:"phone" xorm:"phone VARCHAR(30)" valid:"numeric"`
+	Area      int       `json:"area" xorm:"area" valid:"requried"`
+	Interest  int       `json:"interest" xorm:"interest" valid:"requried"`
 	CreatedAt time.Time `json:"createAt" xorm:"created"`
 	UpdatedAt time.Time `json:"updateAt" xorm:"updated"`
 }

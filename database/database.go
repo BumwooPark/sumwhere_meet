@@ -5,7 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"os"
-	"showper_server/utils"
+	"sumwhere_meet/utils"
 )
 
 func NewDatabase() (*xorm.Engine, error) {
@@ -19,7 +19,7 @@ func NewDatabase() (*xorm.Engine, error) {
 	case "kubernetes":
 		url = fmt.Sprintf("%s:%s@tcp(mysql-svc.sumwhere:3306)/%s", dbUser, dbPass, dbName)
 	default:
-		url = fmt.Sprintf("%s:%s@tcp(localhost:3306)/%s?charset=utf8mb4", "root", "1q2w3e4r", "sumwhere")
+		url = fmt.Sprintf("%s:%s@tcp(localhost:3306)/%s?charset=utf8mb4", "root", "1q2w3e4r", dbName)
 	}
 
 	db, err := xorm.NewEngine(database, url)
