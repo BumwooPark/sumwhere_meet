@@ -4,8 +4,8 @@ import (
 	"errors"
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"showper_server/utils"
 	"strconv"
+	"sumwhere_meet/utils"
 )
 
 type Controller struct{}
@@ -15,6 +15,8 @@ func (c Controller) Init(g *echo.Group) {
 	g.POST("/profile/image", c.Image)
 	g.PATCH("/profile/:id", c.Update)
 	g.GET("/profile/:id", c.Get)
+	g.GET("/profile/city", c.GetCity)
+	g.GET("/profile/district", c.GetDistrict)
 }
 
 func (Controller) Create(e echo.Context) error {
@@ -99,4 +101,22 @@ func (Controller) Image(e echo.Context) error {
 	}
 
 	return utils.ReturnApiSucc(e, http.StatusCreated, true)
+}
+
+func (Controller) GetCity(e echo.Context) error {
+	area, err := Area{}.GetCity(e.Request().Context())
+	if err != nil {
+		return utils.ReturnApiFail(e, http.StatusInternalServerError, utils.ApiErrorDB, err)
+	}
+
+	return utils.ReturnApiSucc(e, http.StatusOK, area)
+}
+
+func (Controller) GetDistrict(e echo.Context) error {
+	area, err := Area{}.GetDistrict(e.Request().Context(), e.QueryParam("city"))
+	if err != nil {
+		return utils.ReturnApiFail(e, http.StatusOK, utils.ApiErrorDB, err)
+	}
+
+	return utils.ReturnApiSucc(e, http.StatusOK, area)
 }

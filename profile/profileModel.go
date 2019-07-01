@@ -14,6 +14,7 @@ type Profile struct {
 	Age       int       `json:"age" xorm:"age" valid:"int,range(10|60),required"`
 	Job       string    `json:"job" xorm:"job" valid:"utfletter,required"`
 	Phone     string    `json:"phone" xorm:"phone VARCHAR(30)" valid:"numeric"`
+	Gender    string    `json:"gender" xorm:"gender VARCHAR(10)" valid:"required"`
 	Area      int       `json:"area" xorm:"area" valid:"requried"`
 	Interest  int       `json:"interest" xorm:"interest" valid:"requried"`
 	CreatedAt time.Time `json:"createAt" xorm:"created"`

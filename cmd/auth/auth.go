@@ -67,7 +67,8 @@ func (a *App) Run(port string) error {
 	a.Use(middleware.RequestID())
 	a.Use(middleware.Recover())
 
-	_ = db.Sync2(new(auth.User), new(auth.SocialAuth), new(profile.Image), new(profile.Profile))
+	_ = db.Sync2(new(auth.User), new(auth.SocialAuth),
+		new(profile.Image), new(profile.Profile))
 
 	a.Validator = &Validator{}
 

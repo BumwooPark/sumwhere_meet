@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/asaskevich/govalidator"
-	"github.com/go-xorm/xorm"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -24,8 +23,6 @@ import (
 var (
 	server   *echo.Echo
 	handler  func(handlerFunc echo.HandlerFunc, c echo.Context) error
-	db       *xorm.Engine
-	testdb   *sql.DB
 	fixtures *testfixtures.Context
 )
 
@@ -39,7 +36,7 @@ func (v *Validator) Validate(i interface{}) error {
 func TestMain(m *testing.M) {
 
 	server = echo.New()
-	os.Setenv("DATABASE_NAME", "test")
+	_ = os.Setenv("DATABASE_NAME", "test")
 	db, err := database.NewDatabase()
 	if err != nil {
 		fmt.Println(err)
@@ -118,4 +115,56 @@ func TestController_Exist(t *testing.T) {
 
 func TestArea(t *testing.T) {
 	prepareTestDatabase()
+}
+
+func TestController_GetCity(t *testing.T) {
+	req := httptest.NewRequest(echo.GET, "/profile/city", nil)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	ctx := server.NewContext(req, rec)
+	require.NoError(t, handler(Controller{}.GetCity, ctx))
+	require.Equal(t, http.StatusOK, rec.Code, rec.Body)
+
+	var v struct {
+		Result  []Area         `json:"result"`
+		Success bool           `json:"success"`
+		Error   utils.ApiError `json:"error"`
+	}
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &v))
+	assert.Equal(t, true, v.Success, v.Error)
+}
+
+func TestController_GetDistrict(t *testing.T) {
+	req := httptest.NewRequest(echo.GET, "/profile/district?city=서울특별시", nil)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	ctx := server.NewContext(req, rec)
+	require.NoError(t, handler(Controller{}.GetDistrict, ctx))
+
+	require.Equal(t, http.StatusOK, rec.Code, rec.Body)
+	var v struct {
+		Result  []Area         `json:"result"`
+		Success bool           `json:"success"`
+		Error   utils.ApiError `json:"error"`
+	}
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &v))
+	assert.Equal(t, true, v.Success, v.Error)
+}
+
+func TestController_GetDistrict_NoQuery(t *testing.T) {
+	req := httptest.NewRequest(echo.GET, "/profile/district", nil)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	ctx := server.NewContext(req, rec)
+	require.NoError(t, handler(Controller{}.GetDistrict, ctx))
+
+	require.Equal(t, http.StatusOK, rec.Code, rec.Body)
+	var v struct {
+		Result  []Area         `json:"result"`
+		Success bool           `json:"success"`
+		Error   utils.ApiError `json:"error"`
+	}
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &v))
+	assert.Equal(t, true, v.Success, v.Error)
+	fmt.Println(v)
 }

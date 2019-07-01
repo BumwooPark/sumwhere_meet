@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/go-xorm/xorm"
 	"github.com/sirupsen/logrus"
-	"showper_server/middlewares"
+	"sumwhere_meet/middlewares"
 )
 
 func DB(ctx context.Context) xorm.Interface {
