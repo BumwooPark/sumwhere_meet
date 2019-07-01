@@ -1,0 +1,5 @@
+database:
+  driver: mysql
+  httpport: 192.168.1.49:3306
+
+
