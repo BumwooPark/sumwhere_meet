@@ -1,10 +1,356 @@
-basePath: '{{.BasePath}}'
-host: '{{.Host}}'
+basePath: /v1
+definitions:
+  auth.Token:
+    properties:
+      token:
+        example: eapihjrphij32249j_erg94-2gojEGG32g2
+        type: string
+    type: object
+  auth.User:
+    properties:
+      admin:
+        type: boolean
+      createAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      nickname:
+        type: string
+      password:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  profile.Area:
+    properties:
+      city:
+        example: 서울특별시
+        type: string
+      createdAt:
+        type: string
+      district:
+        example: 강남구
+        type: string
+      id:
+        example: 0
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  profile.Profile:
+    properties:
+      age:
+        example: 30
+        type: integer
+      area:
+        type: integer
+      createAt:
+        type: string
+      gender:
+        example: 남성
+        type: string
+      id:
+        example: 1
+        type: integer
+      interest:
+        type: integer
+      job:
+        example: 공무원
+        type: string
+      phone:
+        example: "01051416906"
+        type: string
+      updateAt:
+        type: string
+      userID:
+        example: 1
+        type: integer
+    type: object
+  utils.ApiError:
+    properties:
+      code:
+        type: integer
+      details:
+        type: object
+      message:
+        type: string
+    type: object
+host: auth.sumwhere.kr
 info:
-  contact: {}
-  description: '{{.Description}}'
-  license: {}
-  title: '{{.Title}}'
-  version: '{{.Version}}'
-paths: {}
+  contact:
+    email: qjadn0914@naver.com
+    name: API Support
+    url: https://www.sumwhere.kr
+  description: This is a Sumwhere server API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Sumwhere API
+  version: "2.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: 로그인
+      operationId: get-string-by-int
+      parameters:
+      - description: email,password만 사용
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/auth.User'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Token'
+            type: object
+      summary: default 로그인
+      tags:
+      - signin&signup
+  /login/facebook:
+    post:
+      consumes:
+      - application/json
+      description: 페이스북으로 로그인
+      parameters:
+      - description: 페이스북 토큰
+        in: body
+        name: token
+        required: true
+        schema:
+          $ref: '#/definitions/auth.Token'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Token'
+            type: object
+      summary: 페이스북으로 로그인
+      tags:
+      - signin&signup
+  /login/kakao:
+    post:
+      consumes:
+      - application/json
+      description: 카카오로 로그인
+      parameters:
+      - description: 카카오 토큰
+        in: body
+        name: token
+        required: true
+        schema:
+          $ref: '#/definitions/auth.Token'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Token'
+            type: object
+      summary: 카카오 로그인
+      tags:
+      - signin&signup
+  /profile:
+    post:
+      consumes:
+      - application/json
+      description: create user profile
+      operationId: get-string-by-int
+      parameters:
+      - description: profile
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/profile.Profile'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/profile.Profile'
+            type: object
+      summary: 프로필 생성
+      tags:
+      - profile
+  /profile/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get user profile
+      operationId: get-string-by-int
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Token:
+              description: qwerty
+              type: string
+          schema:
+            $ref: '#/definitions/profile.Profile'
+            type: object
+      summary: 프로필 가져오기
+      tags:
+      - profile
+    patch:
+      consumes:
+      - application/json
+      description: update user profile
+      operationId: get-string-by-int
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Token:
+              description: qwerty
+              type: string
+          schema:
+            $ref: '#/definitions/profile.Profile'
+            type: object
+      summary: 프로필 업데이트
+      tags:
+      - profile
+  /profile/city:
+    get:
+      consumes:
+      - application/json
+      description: 전국 시 모델 가져오기
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Token:
+              description: qwerty
+              type: string
+          schema:
+            items:
+              $ref: '#/definitions/profile.Area'
+            type: array
+      summary: 전국 시 가져오기
+      tags:
+      - profile
+  /profile/district:
+    get:
+      consumes:
+      - application/json
+      description: 전국 시 모델 가져오기
+      parameters:
+      - description: 원하는 도시
+        in: query
+        name: city
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Token:
+              description: qwerty
+              type: string
+          schema:
+            items:
+              $ref: '#/definitions/profile.Area'
+            type: array
+      summary: 전국 시 모델 가져오기
+      tags:
+      - profile
+  /profile/image/{id}:
+    post:
+      consumes:
+      - multipart/form-data
+      description: set user profile image
+      operationId: profile
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: image must 3
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Token:
+              description: qwerty
+              type: string
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ApiError'
+            type: object
+      summary: 프로필 이미지 추가
+      tags:
+      - profile
+  /signup/email:
+    post:
+      consumes:
+      - application/json
+      description: 로그인
+      parameters:
+      - description: 유저모델
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/auth.User'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Token'
+            type: object
+      summary: 회원가입
+      tags:
+      - signin&signup
+schemes:
+- https
+- http
 swagger: "2.0"

@@ -21,6 +21,16 @@ func (c Controller) Init(g *echo.Group) {
 	g.POST("/mobile", c.MobileAuth)
 }
 
+// login
+// @Summary default 로그인
+// @Description 로그인
+// @ID get-string-by-int
+// @Param email body auth.User true "email,password만 사용"
+// @Tags signin&signup
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} auth.Token
+// @Router /login [post]
 func (c Controller) Login(e echo.Context) error {
 	var v struct {
 		Email    string `json:"email" valid:"required"`
@@ -45,17 +55,26 @@ func (c Controller) Login(e echo.Context) error {
 		return utils.ReturnApiFail(e, http.StatusNotFound, utils.ApiErrorNotFound, err)
 	}
 
-	if !utils.ComparePasswords(user.Password, []byte(u.Password)) {
+	if !utils.ComparePasswords(u.Password, []byte(u.Password)) {
 		return utils.ReturnApiFail(e, http.StatusUnauthorized, utils.ApiErrorPassword, err)
 	}
 
-	t, err := u.GenerateToken()
+	t, err := user.GenerateToken()
 	if err != nil {
 		return utils.ReturnApiFail(e, http.StatusInternalServerError, utils.ApiErrorTokenInvaild, err)
 	}
 	return utils.ReturnApiSucc(e, http.StatusCreated, map[string]string{"token": t})
 }
 
+// signup
+// @Summary 회원가입
+// @Description 로그인
+// @Param email body auth.User true "유저모델"
+// @Tags signin&signup
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} auth.Token
+// @Router /signup/email [post]
 func (c Controller) SignUp(e echo.Context) error {
 
 	var u User
@@ -84,10 +103,17 @@ func (c Controller) SignUp(e echo.Context) error {
 	return utils.ReturnApiSucc(e, http.StatusCreated, map[string]string{"token": t})
 }
 
+// signup
+// @Summary 페이스북으로 로그인
+// @Description 페이스북으로 로그인
+// @Param token body auth.Token true "페이스북 토큰"
+// @Tags signin&signup
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} auth.Token
+// @Router /login/facebook [post]
 func (c Controller) FaceBook(e echo.Context) error {
-	var v struct {
-		Token string `json:"token"`
-	}
+	var v Token
 	err := e.Bind(&v)
 	if err != nil {
 		return utils.ReturnApiFail(e, http.StatusBadRequest, utils.ApiErrorParameter, err)
@@ -118,12 +144,18 @@ func (c Controller) FaceBook(e echo.Context) error {
 
 }
 
+// login by kakao
+// @Summary 카카오 로그인
+// @Description 카카오로 로그인
+// @Param token body auth.Token true "카카오 토큰"
+// @Tags signin&signup
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} auth.Token
+// @Router /login/kakao [post]
 func (c Controller) Kakao(e echo.Context) error {
 
-	var v struct {
-		Token string `json:"token"`
-	}
-
+	var v Token
 	err := e.Bind(&v)
 	if err != nil {
 		return utils.ReturnApiFail(e, http.StatusBadRequest, utils.ApiErrorParameter, err)

@@ -9,12 +9,12 @@ import (
 )
 
 type Profile struct {
-	ID        int64     `json:"id" xorm:"id pk autoincr"`
-	UserID    int64     `json:"userID" xorm:"user_id" valid:"int,required"`
-	Age       int       `json:"age" xorm:"age" valid:"int,range(10|60),required"`
-	Job       string    `json:"job" xorm:"job" valid:"utfletter,required"`
-	Phone     string    `json:"phone" xorm:"phone VARCHAR(30)" valid:"numeric"`
-	Gender    string    `json:"gender" xorm:"gender VARCHAR(10)" valid:"required"`
+	ID        int64     `json:"id" xorm:"id pk autoincr" example:"1"`
+	UserID    int64     `json:"userID" xorm:"user_id" valid:"int,required" example:"1"`
+	Age       int       `json:"age" xorm:"age" valid:"int,range(10|60),required" example:"30"`
+	Job       string    `json:"job" xorm:"job" valid:"utfletter,required" example:"공무원"`
+	Phone     string    `json:"phone" xorm:"phone VARCHAR(30)" valid:"numeric" example:"01051416906"`
+	Gender    string    `json:"gender" xorm:"gender VARCHAR(10)" valid:"required" example:"남성"`
 	Area      int       `json:"area" xorm:"area" valid:"requried"`
 	Interest  int       `json:"interest" xorm:"interest" valid:"requried"`
 	CreatedAt time.Time `json:"createAt" xorm:"created"`

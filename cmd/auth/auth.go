@@ -37,20 +37,6 @@ func NewApp() *App {
 	}
 }
 
-// @title Sumwhere API
-// @version 2.0
-// @description This is a Sumwhere server API
-// @termsOfService http://swagger.io/terms/
-
-// @contact.name API Support
-// @contact.url https://www.sumwhere.kr
-// @contact.email qjadn0914@naver.com
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host auth.sumwhere.kr
-// @BasePath /v1
-// @schemes https http
 func (a *App) Run(port string) error {
 
 	a.importControllers()
@@ -68,7 +54,8 @@ func (a *App) Run(port string) error {
 	a.Use(middleware.Recover())
 
 	_ = db.Sync2(new(auth.User), new(auth.SocialAuth),
-		new(profile.Image), new(profile.Profile))
+		new(profile.Image), new(profile.Profile), new(profile.Area),
+		new(profile.InterestDetail), new(profile.InterestCategory))
 
 	a.Validator = &Validator{}
 
@@ -77,7 +64,7 @@ func (a *App) Run(port string) error {
 
 	go func() {
 		<-sigs
-		ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 		if err := a.Shutdown(ctx); err != nil {
 			a.Logger.Fatal(err)
@@ -93,6 +80,20 @@ func (a *App) importControllers() {
 	v1.GET("/swagger/*", echoSwagger.WrapHandler)
 }
 
+// @title Sumwhere API
+// @version 2.0
+// @description This is a Sumwhere server API
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url https://www.sumwhere.kr
+// @contact.email qjadn0914@naver.com
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host auth.sumwhere.kr
+// @BasePath /v1
+// @schemes https http
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	application := NewApp()

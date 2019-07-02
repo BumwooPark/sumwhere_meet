@@ -7,9 +7,9 @@ import (
 )
 
 type Area struct {
-	ID        int       `json:"id" xorm:"id pk autoincr"`
-	City      string    `json:"city" xorm:"city"`
-	District  string    `json:"district" xml:"district"`
+	ID        int       `json:"id" xorm:"id pk autoincr" example:"0"`
+	City      string    `json:"city" xorm:"city" example:"서울특별시"`
+	District  string    `json:"district" xml:"district" example:"강남구"`
 	CreatedAt time.Time `json:"createdAt" xorm:"created"`
 	UpdatedAt time.Time `json:"updatedAt" xorm:"updated"`
 }
